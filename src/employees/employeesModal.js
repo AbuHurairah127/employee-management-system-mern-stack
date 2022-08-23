@@ -8,5 +8,9 @@ const employeesSchema = new Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   designation: { type: String, required: true },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
 });
 module.exports = mongoose.model("Employees", employeesSchema);

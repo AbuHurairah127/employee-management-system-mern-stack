@@ -2,6 +2,7 @@ const connectToMongoDB = require("./db");
 const express = require("express");
 connectToMongoDB();
 const app = express();
+const bodyParser = require("body-parser");
 const PORT = 5000;
 app.use(express.json());
 app.use("/employees", require("./src/employees/employeesRoutes"));
