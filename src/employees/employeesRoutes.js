@@ -48,4 +48,42 @@ router.post(
     }
   }
 );
+// Logging In a user with email and password
+router.post("/login", [
+  body("email", "Enter a valid email address.").isEmail(),
+  body("password", "Password can't be blank.").exists(),
+  async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+      const { email, password } = req.body;
+      let employee = await Employees.findOne({ email });
+      if (!employee) {
+        return res
+          .status(400)
+          .json({ error: "Sorry user with this email doesn't exists" });
+      }
+      const passwordCompare = await bcrypt.compare(password, employee.password);
+      if (!passwordCompare) {
+        return res.status(400).json({ error: "Password is incorrect." });
+      }
+      const data = {
+        employee: {
+          id: employee.id,
+        },
+      };
+      const authToken = jwt.sign(data, JWT_SECRET_KEY);
+      res.json({
+        authToken: authToken,
+        success: "User has been logged in successfully.",
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json("Internal server error");
+    }
+  },
+]);
+
 module.exports = router;
