@@ -91,7 +91,7 @@ router.post("/user-data", authEmployee, async (req, res) => {
   try {
     const userId = req.user.id;
     const employee = await Employees.findById(userId).select("-password");
-    res.json({ employee });
+    res.status(200).json({ employee });
   } catch (error) {
     console.error(error.message);
     res.status(500).json("Internal server error");
