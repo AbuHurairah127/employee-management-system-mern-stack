@@ -5,6 +5,8 @@ const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const JWT_SECRET_KEY = "abuHurairahisagoodboyandheisgonnatobeagooddeveloper";
+const authEmployee = require("./../middleware/auth");
+const { request } = require("express");
 // Creating Employee :Login Required
 router.post(
   "/create-employee",
@@ -77,7 +79,6 @@ router.post("/login", [
       const authToken = jwt.sign(data, JWT_SECRET_KEY);
       res.json({
         authToken: authToken,
-        success: "User has been logged in successfully.",
       });
     } catch (error) {
       console.error(error);
@@ -85,5 +86,16 @@ router.post("/login", [
     }
   },
 ]);
+// Fetching Users Data
+router.post("/user-data", authEmployee, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const employee = await Employees.findById(userId).select("-password");
+    res.json({ employee });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json("Internal server error");
+  }
+});
 
 module.exports = router;
