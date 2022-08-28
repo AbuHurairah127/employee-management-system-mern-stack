@@ -7,3 +7,4 @@ const connectToMongoDB = () => {
   });
 };
 module.exports = connectToMongoDB;
+// mongodb+srv://abuhurairah_127:<password>@cluster0.2e0ysjg.mongodb.net/?retryWrites=true&w=majority

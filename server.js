@@ -2,10 +2,9 @@ const connectToMongoDB = require("./db");
 const express = require("express");
 connectToMongoDB();
 const app = express();
-const bodyParser = require("body-parser");
 const PORT = 5000;
 app.use(express.json());
-app.use("/employees", require("./src/employees/employeesRoutes"));
+app.use("/auth", require("./src/auth/authRoutes"));
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
